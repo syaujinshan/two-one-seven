@@ -39,7 +39,7 @@ class SettingSiteValidate extends Validate
         }
 
         $routeModel = new RouteModel();
-        $fullUrl    = $routeModel->buildFullUrl('admin/Index/index', []);
+        $fullUrl    = $routeModel->buildFullUrl('admin/IndexController/index', []);
         if (!$routeModel->exists($value.'$', $fullUrl)) {
             return true;
         } else {

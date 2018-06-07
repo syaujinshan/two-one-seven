@@ -32,7 +32,7 @@ class PublicController extends AdminBaseController
 
         $admin_id = session('ADMIN_ID');
         if (!empty($admin_id)) {//已经登录
-            return redirect(url("admin/Index/index"));
+            return redirect(url("admin/IndexController/index"));
         } else {
             $site_admin_url_password = config("cmf_SITE_ADMIN_URL_PASSWORD");
             $upw                     = session("__CMF_UPW__");
@@ -106,7 +106,7 @@ class PublicController extends AdminBaseController
                 Db::name('user')->update($result);
                 cookie("admin_username", $name, 3600 * 24 * 30);
                 session("__LOGIN_BY_CMF_ADMIN_PW__", null);
-                $this->success(lang('LOGIN_SUCCESS'), url("admin/Index/index"));
+                $this->success(lang('LOGIN_SUCCESS'), url("admin/IndexController/index"));
             } else {
                 $this->error(lang('PASSWORD_NOT_RIGHT'));
             }

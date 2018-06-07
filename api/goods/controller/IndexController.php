@@ -8,13 +8,21 @@
 
 namespace api\goods\controller;
 
-
-
 use cmf\controller\RestBaseController;
+use think\Log;
 use think\Request;
+use api\goods\model\GoodsModel;
 
 class IndexController extends RestBaseController
 {
+    private $goodsModel;
+
+    public function __construct(Request $request = null)
+    {
+        parent::__construct($request);
+        $this->goodsModel = new GoodsModel();
+    }
+
     public function imageUpload(Request $request){
         $image = $request->file('file');
         if($image){
@@ -28,5 +36,21 @@ class IndexController extends RestBaseController
         }else{
             $this->error('请选择文件');
         }
+    }
+    public function addGoods(){
+        $data = $this->request->param();
+        Log::info($data);
+        if(empty($data)){
+            $this->error('提交数据不能为空');
+        }
+
+        $this->goodsModel->save($data);
+        $this->success('添加成功');
+    }
+
+    public function goodsList(){
+        $list = $this->goodsModel->order('create_time desc')->field('id,title,banner,amount,price')->select();
+
+        $this->success('获取成功',$list);
     }
 }

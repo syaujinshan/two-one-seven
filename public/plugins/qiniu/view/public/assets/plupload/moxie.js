@@ -424,7 +424,7 @@ define('moxie/core/utils/Basic', [], function() {
 	@static
 	@param {Mixed} needle Element to find
 	@param {Array} array
-	@return {Int} Index of the element, or -1 if not found
+	@return {Int} IndexController of the element, or -1 if not found
 	*/
 	function inArray(needle, array) {
 		if (array) {
