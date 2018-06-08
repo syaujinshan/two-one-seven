@@ -53,4 +53,10 @@ class IndexController extends RestBaseController
 
         $this->success('获取成功',$list);
     }
+
+    public function goodsDetail(){
+        $good_id = $this->request->param('goods_id');
+        $data = $this->goodsModel->where('id',$good_id)->field('id,title,banner,desc,amount,price')->find();
+        $this->success('获取成功',$data);
+    }
 }

@@ -13,6 +13,7 @@ use cmf\controller\RestBaseController;
 
 class IndexController extends RestBaseController
 {
+
     public function joinGroup(){
 
     }
