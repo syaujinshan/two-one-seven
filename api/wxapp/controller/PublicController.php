@@ -8,6 +8,7 @@
 // +----------------------------------------------------------------------
 namespace api\wxapp\controller;
 
+use api\goods\service\WalletService;
 use think\Db;
 use cmf\controller\RestBaseController;
 use wxapp\aes\WXBizDataCrypt;
@@ -136,6 +137,11 @@ class PublicController extends RestBaseController
                 'status'          => 1,
                 'more'            => json_encode($wxUserData)
             ]);
+
+
+            //首次注册创建钱包
+            $wallet_service = new WalletService();
+            $wallet_service->createWallet($userId);
 
             $token = cmf_generate_user_token($userId, 'wxapp');
 

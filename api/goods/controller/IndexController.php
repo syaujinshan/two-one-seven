@@ -8,19 +8,22 @@
 
 namespace api\goods\controller;
 
-use cmf\controller\RestBaseController;
+use api\goods\model\GoodsUserModel;
+use cmf\controller\RestUserBaseController;
 use think\Log;
 use think\Request;
 use api\goods\model\GoodsModel;
 
-class IndexController extends RestBaseController
+class IndexController extends RestUserBaseController
 {
     private $goodsModel;
+    private $goodsUserModel;
 
     public function __construct(Request $request = null)
     {
         parent::__construct($request);
         $this->goodsModel = new GoodsModel();
+        $this->goodsUserModel = new GoodsUserModel();
     }
 
     public function imageUpload(Request $request){
@@ -43,20 +46,36 @@ class IndexController extends RestBaseController
         if(empty($data)){
             $this->error('提交数据不能为空');
         }
-
+        $data['owner'] = $this->getUserId();
         $this->goodsModel->save($data);
         $this->success('添加成功');
     }
 
     public function goodsList(){
-        $list = $this->goodsModel->order('create_time desc')->field('id,title,banner,amount,price')->select();
+        try {
+            $list = $this->goodsModel->order('create_time desc')->field('id,title,banner,amount,price')->select();
+        }  catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
 
         $this->success('获取成功',$list);
     }
 
     public function goodsDetail(){
         $good_id = $this->request->param('goods_id');
-        $data = $this->goodsModel->where('id',$good_id)->field('id,title,banner,desc,amount,price')->find();
+        try {
+            $data = $this->goodsModel->where('id', $good_id)->field('id,title,banner,desc,amount,price')->find();
+            $count = $this->goodsUserModel->where([
+                'goods_id' => $good_id,
+                'user_id'  => $this->getUserId()
+            ])->count();
+            if ($count == 0)
+                $data['isJoin'] = false;
+            else
+                $data['isJoin'] = true;
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
         $this->success('获取成功',$data);
     }
 }

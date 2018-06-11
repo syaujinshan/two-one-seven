@@ -13,6 +13,15 @@ class GoodsModel extends Model
 {
     protected $autoWriteTimestamp = true;
 
+    public function user(){
+        return $this->belongsToMany('User','goods_user');
+    }
+    public function getDeadline($goods_id){
+        return self::where('id',$goods_id)->value('deadline');
+    }
+    public function getPrice($goods_id){
+        return self::where('id',$goods_id)->value('price');
+    }
     public function getPriceAttr($value){
         return $value/100;
     }
